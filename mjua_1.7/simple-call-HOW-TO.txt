@@ -1,0 +1,43 @@
+# Simple-call HOW-TO
+# ________________________________________________________________
+# (by Luca Veltri, 21/3/2010)
+#
+
+# to establish a call between two UAs, run the graphical UAs with the desired configuration files:
+uaw -f config\a.cfg
+uaw -f config\b.cfg
+
+# if you run both UAs on the same host (PC) probably you have to activate the audio capture and speakers only in one UA respectively; then you can use:
+uaw -f config\a.cfg --send-only
+uaw -f config\b.cfg --recv-only
+
+# or:
+uaw -f config\a.cfg
+uaw -f config\b.cfg --loopback
+
+# or without GUI:
+uac -f config\a.cfg --send-only
+uac -f config\b.cfg --recv-only
+
+# note that '--send-only' and '--recv-only' refer only to the direction of the media traffic (not the caller and callee); the same result can be achieved by setting the corresponding parameters ('send_only', 'recv_only', and 'loopback') in the configuration files.
+
+
+# you can also specify that an UA (A) (caller) has to call a given UA (B) (callee); moreover you can set the callee to automatically respond to the call (e.g. after 0 seconds):
+uac -f config\b.cfg --recv-only -y 0
+uac -f config\a.cfg --send-only -c 127.0.0.8:5080
+
+# the same result can be achieved by setting respectively the parameters 'call_to' and 'accept_time' in the configuration files;
+# note that in case of automatic call, it is preferred to run the callee before running the caller.
+
+
+# if in the configuration files you have specified a valid contact address and a registration server (or proxy) you can automatically register for a given time (e.g. 30min=180sec) as follows:
+uac -f config\b.cfg --recv-only -g 1800 -y 0
+uac -f config\a.cfg --send-only -g 1800 -c 127.0.0.8:5080
+
+
+# use -h in order to view all command-line options:
+uac -h
+
+# or:
+uaw -h
+
